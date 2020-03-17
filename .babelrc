@@ -1,13 +1,8 @@
 {
-    "presets": [
-        ["es2015", {"loose": true}]
-    ],
+    "presets": [["@babel/preset-env"]],
     "plugins": [
-        "add-module-exports",
-        "transform-class-properties",
-        "transform-function-bind",
-        "transform-object-rest-spread",
-        "transform-es3-member-expression-literals",
-        "transform-es3-property-literals"
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-syntax-function-bind",
+        "@babel/plugin-proposal-object-rest-spread"
     ]
 }
