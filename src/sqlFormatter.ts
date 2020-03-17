@@ -2,14 +2,19 @@ import Db2Formatter from './languages/Db2Formatter';
 import N1qlFormatter from './languages/N1qlFormatter';
 import PlSqlFormatter from './languages/PlSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
-import { ICfg } from './@types';
+
+export interface IConfig {
+  language?: string;
+  indent?: string;
+  params?: any;
+}
 
 export default {
   /**
    * Format whitespaces in a query to make it easier to read.
    */
-  format: (query: string, _cfg?: ICfg): string => {
-    const cfg: ICfg = _cfg || {};
+  format: (query: string, _cfg?: IConfig): string => {
+    const cfg: IConfig = _cfg || {};
 
     switch (cfg.language) {
       case 'db2':

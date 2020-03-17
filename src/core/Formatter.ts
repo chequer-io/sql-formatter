@@ -4,11 +4,11 @@ import tokenTypes from './tokenTypes';
 import Indentation from './Indentation';
 import InlineBlock from './InlineBlock';
 import Params from './Params';
-import { ICfg } from '../@types';
 import Tokenizer, { IToken } from './Tokenizer';
+import { IConfig } from '../sqlFormatter';
 
 export default class Formatter {
-  cfg: ICfg;
+  cfg: IConfig;
   indentation: Indentation;
   inlineBlock: InlineBlock;
   params: Params;
@@ -17,7 +17,7 @@ export default class Formatter {
   tokens: IToken[];
   index: number;
 
-  constructor(cfg: ICfg, tokenizer: Tokenizer) {
+  constructor(cfg: IConfig, tokenizer: Tokenizer) {
     this.cfg = cfg || {};
     this.indentation = new Indentation(this.cfg.indent);
     this.inlineBlock = new InlineBlock();

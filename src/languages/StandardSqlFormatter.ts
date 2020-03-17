@@ -1,6 +1,6 @@
-import { ICfg } from './../@types';
 import Formatter from '../core/Formatter';
 import Tokenizer from '../core/Tokenizer';
+import { IConfig } from '../sqlFormatter';
 
 const reservedWords = [
   'ACCESSIBLE',
@@ -327,9 +327,9 @@ const reservedNewlineWords = [
 let tokenizer: Tokenizer;
 
 export default class StandardSqlFormatter {
-  cfg: ICfg;
+  cfg: IConfig;
 
-  constructor(cfg: ICfg) {
+  constructor(cfg: IConfig) {
     this.cfg = cfg;
   }
 
