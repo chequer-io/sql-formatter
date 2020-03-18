@@ -13,6 +13,7 @@ export interface ITokenizerConfig {
   namedPlaceholderTypes: string[];
   lineCommentTypes: string[];
   specialWordChars?: string[];
+  skipWordBlockStarts?: string[];
 }
 
 export interface IToken {
@@ -37,6 +38,7 @@ export default class Tokenizer {
   INDEXED_PLACEHOLDER_REGEX: RegExp | false;
   IDENT_NAMED_PLACEHOLDER_REGEX: RegExp | false;
   STRING_NAMED_PLACEHOLDER_REGEX: RegExp | false;
+  SKIP_WORDBLOCK_REGEX: RegExp | false;
 
   constructor(cfg: ITokenizerConfig) {
     this.WHITESPACE_REGEX = /^(\s+)/;
@@ -53,6 +55,10 @@ export default class Tokenizer {
       cfg.reservedNewlineWords,
     );
     this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
+
+    this.SKIP_WORDBLOCK_REGEX = this.createSkipWordBlockRegex(
+      cfg.skipWordBlockStarts ?? [],
+    );
 
     this.WORD_REGEX = this.createWordRegex(cfg.specialWordChars);
     this.STRING_REGEX = this.createStringRegex(cfg.stringTypes);
@@ -85,6 +91,18 @@ export default class Tokenizer {
   createReservedWordRegex(reservedWords: string[]) {
     const reservedWordsPattern = reservedWords.join('|').replace(/ /g, '\\s+');
     return new RegExp(`^(${reservedWordsPattern})\\b`, 'i');
+  }
+
+  createSkipWordBlockRegex(skipWordBlockStarts: string[]) {
+    if (isEmpty(skipWordBlockStarts)) {
+      return false;
+    }
+
+    const skipWordBlockPattern = skipWordBlockStarts
+      .map(word => `${word}[^\\s]+`)
+      .join('|')
+      .replace(/ /g, '\\s+');
+    return new RegExp(`^(${skipWordBlockPattern})\\b`, 'i');
   }
 
   createWordRegex(specialChars: string[] = []) {
@@ -171,6 +189,7 @@ export default class Tokenizer {
 
   getNextToken(input: string, previousToken?: IToken): IToken | undefined {
     return (
+      this.getSkipWordBlockToken(input) ||
       this.getWhitespaceToken(input) ||
       this.getCommentToken(input) ||
       this.getStringToken(input) ||
@@ -336,6 +355,19 @@ export default class Tokenizer {
     );
   }
 
+  getSkipWordBlockToken(input: string, previousToken?: IToken) {
+    // A reserved word cannot be preceded by a "."
+    // this makes it so in "mytable.from", "from" is not considered a reserved word
+    if (previousToken && previousToken.value && previousToken.value === '.') {
+      return;
+    }
+    return this.getTokenOnFirstMatch({
+      input,
+      type: tokenTypes.SKIP_BLOCK,
+      regex: this.SKIP_WORDBLOCK_REGEX,
+    });
+  }
+
   getToplevelReservedToken(input: string) {
     return this.getTokenOnFirstMatch({
       input,
@@ -377,11 +409,14 @@ export default class Tokenizer {
     type: string;
     regex: RegExp | false;
   }): IToken | undefined {
-    const matches = input.match(regex as RegExp);
+    if (regex) {
+      const matches = input.match(regex as RegExp);
 
-    if (matches) {
-      return { type, value: matches[1] };
+      if (matches) {
+        return { type, value: matches[1] };
+      }
     }
+
     return;
   }
 }

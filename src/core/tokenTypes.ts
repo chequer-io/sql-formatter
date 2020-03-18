@@ -16,4 +16,5 @@ export default {
   NUMBER: 'number',
   PLACEHOLDER: 'placeholder',
   COMMENT: 'comment',
+  SKIP_BLOCK: 'skip-block',
 };

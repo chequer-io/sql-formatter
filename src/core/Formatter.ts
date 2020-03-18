@@ -59,6 +59,9 @@ export default class Formatter {
       } else if (token.type === tokenTypes.RESERVED) {
         formattedQuery = this.formatWithSpaces(token, formattedQuery);
         this.previousReservedWord = token;
+      } else if (token.type === tokenTypes.SKIP_BLOCK) {
+        formattedQuery = this.formatWithSpaces(token, formattedQuery);
+        this.previousReservedWord = token;
       } else if (token.type === tokenTypes.OPEN_PAREN) {
         formattedQuery = this.formatOpeningParentheses(token, formattedQuery);
       } else if (token.type === tokenTypes.CLOSE_PAREN) {

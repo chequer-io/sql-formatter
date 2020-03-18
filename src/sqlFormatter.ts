@@ -2,12 +2,14 @@ import Db2Formatter from './languages/Db2Formatter';
 import N1qlFormatter from './languages/N1qlFormatter';
 import PlSqlFormatter from './languages/PlSqlFormatter';
 import StandardSqlFormatter from './languages/StandardSqlFormatter';
+import SnowflakeFormatter from './languages/SnowflakeFormatter';
 
 export enum Language {
   DB2 = 'db2',
   N1QL = 'n1ql',
   PLSQL = 'pl/sql',
   SQL = 'sql',
+  SNOWFLAKE = 'snowflake',
 }
 
 export interface IConfig {
@@ -30,6 +32,8 @@ export default {
         return new N1qlFormatter(cfg).format(query);
       case Language.PLSQL:
         return new PlSqlFormatter(cfg).format(query);
+      case Language.SNOWFLAKE:
+        return new SnowflakeFormatter(cfg).format(query);
       case Language.SQL:
       case undefined:
         return new StandardSqlFormatter(cfg).format(query);

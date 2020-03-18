@@ -23,14 +23,14 @@
   "scripts": {
     "clean": "rimraf lib dist",
     "lint": "eslint .",
-    "test": "jest",
+    "test": "jest --verbose=true",
     "test:watch": "npm run test -- --watch",
     "check": "npm run lint && npm run test",
     "build": "npm run build:commonjs && npm run build:declaration && npm run build:umd && npm run build:umd:min",
     "build:commonjs": "babel src --out-dir lib --extensions \".ts\"",
     "build:umd": "cross-env NODE_ENV=development webpack lib/sqlFormatter.js -o dist/sql-formatter.js",
     "build:umd:min": "cross-env NODE_ENV=production webpack lib/sqlFormatter.js -o dist/sql-formatter.min.js",
-    "build:declaration": "tsc --emitDeclarationOnly --declaration true --declarationDir \"lib\"",
+    "build:declaration": "tsc --emitDeclarationOnly --project tsconfig.test.json",
     "prepublish": "npm run clean && npm run build"
   },
   "repository": {
@@ -54,6 +54,7 @@
     "@babel/preset-typescript": "^7.8.3",
     "@types/jest": "^25.1.4",
     "@types/lodash": "^4.14.149",
+    "@types/node": "^13.9.1",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
     "babel-eslint": "^10.1.0",
