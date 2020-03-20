@@ -376,7 +376,7 @@ export default class StandardSqlFormatter {
         indexedPlaceholderTypes: ['?'],
         namedPlaceholderTypes: ['@', ':'],
         lineCommentTypes: ['#', '--'],
-        skipWordBlockStarts: ['FIELDS'],
+        skipWordBlockRegExp: ['[^\\s]+\\:[^\\s]+'],
       });
     }
     return new Formatter(this.cfg, tokenizer).format(query);

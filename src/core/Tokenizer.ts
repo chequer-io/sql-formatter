@@ -13,7 +13,7 @@ export interface ITokenizerConfig {
   namedPlaceholderTypes: string[];
   lineCommentTypes: string[];
   specialWordChars?: string[];
-  skipWordBlockStarts?: string[];
+  skipWordBlockRegExp?: string[];
 }
 
 export interface IToken {
@@ -57,7 +57,7 @@ export default class Tokenizer {
     this.RESERVED_PLAIN_REGEX = this.createReservedWordRegex(cfg.reservedWords);
 
     this.SKIP_WORDBLOCK_REGEX = this.createSkipWordBlockRegex(
-      cfg.skipWordBlockStarts ?? [],
+      cfg.skipWordBlockRegExp ?? [],
     );
 
     this.WORD_REGEX = this.createWordRegex(cfg.specialWordChars);
@@ -93,13 +93,12 @@ export default class Tokenizer {
     return new RegExp(`^(${reservedWordsPattern})\\b`, 'i');
   }
 
-  createSkipWordBlockRegex(skipWordBlockStarts: string[]) {
-    if (isEmpty(skipWordBlockStarts)) {
+  createSkipWordBlockRegex(skipWordBlockRegExp: string[]) {
+    if (isEmpty(skipWordBlockRegExp)) {
       return false;
     }
 
-    const skipWordBlockPattern = skipWordBlockStarts
-      .map(word => `${word}[^\\s]+`)
+    const skipWordBlockPattern = skipWordBlockRegExp
       .join('|')
       .replace(/ /g, '\\s+');
     return new RegExp(`^(${skipWordBlockPattern})\\b`, 'i');
