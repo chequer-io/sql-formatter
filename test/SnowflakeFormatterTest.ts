@@ -32,4 +32,19 @@ describe('SnowflakeFormatter', function() {
         '  status;',
     );
   });
+
+  it('formats lambda', function() {
+    const result = sqlFormatter.format(
+      'SELECT VALUE::string AS role FROM table(flatten(input => parse_json(CURRENT_AVAILABLE_ROLES())));',
+      { language: Language.SNOWFLAKE },
+    );
+    expect(result).toBe(
+      'SELECT\n' +
+        '  VALUE::string AS role\n' +
+        'FROM\n' +
+        '  table(\n' +
+        '    flatten(input => parse_json(CURRENT_AVAILABLE_ROLES()))\n' +
+        '  );',
+    );
+  });
 });
