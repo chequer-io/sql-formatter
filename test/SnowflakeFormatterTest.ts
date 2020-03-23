@@ -1,6 +1,9 @@
 import sqlFormatter, { Language } from '../src/sqlFormatter';
+import behavesLikeSqlFormatter from './behavesLikeSqlFormatter';
 
 describe('SnowflakeFormatter', function() {
+  behavesLikeSqlFormatter();
+
   it('formats pipeline ::', function() {
     expect(
       sqlFormatter.format(

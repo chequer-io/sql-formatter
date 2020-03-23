@@ -354,12 +354,7 @@ export default class Tokenizer {
     );
   }
 
-  getSkipWordBlockToken(input: string, previousToken?: IToken) {
-    // A reserved word cannot be preceded by a "."
-    // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken && previousToken.value && previousToken.value === '.') {
-      return;
-    }
+  getSkipWordBlockToken(input: string) {
     return this.getTokenOnFirstMatch({
       input,
       type: tokenTypes.SKIP_BLOCK,
