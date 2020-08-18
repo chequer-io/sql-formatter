@@ -42,7 +42,7 @@
   },
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.20"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
